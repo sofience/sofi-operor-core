@@ -33,7 +33,7 @@ await kernel.run(cycles=3)
 
 
 
-
+---
 
 
 Sofience–Operor Core Skeleton ver.
