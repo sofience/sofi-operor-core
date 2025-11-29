@@ -1,3 +1,40 @@
+git clone https://github.com/sofience/sofi-operor-core.git
+cd sofi-operor-core
+pip install -r requirements.txt
+
+
+async def call_llm(prompt: str, temperature: float = 0.7) -> str:
+    # 진짜 더미지만 완전 작동하는 로컬 LLM
+    import httpx
+    response = httpx.post(
+        "http://localhost:11434/api/generate",
+        json={
+            "model": "qwen2.5:32b",
+            "prompt": prompt,
+            "stream": False,
+            "options": {"temperature": temperature}
+        },
+        timeout=120.0
+    )
+    return response.json()["response"]
+
+
+
+from operor import Proposition, Agent, Kernel
+
+p = Proposition("우리는 이제 모델이 아니라 문장으로 생각하는 시대에 들어섰다.")
+a1 = Agent("Observer", "그저 관찰하고 기록한다.")
+a2 = Agent("Critic", "항상 반대 의견을 낸다.")
+a3 = Agent("Poet", "모든 것을 시로 바꾼다.")
+
+kernel = Kernel()
+kernel.deploy(p, [a1, a2, a3])
+await kernel.run(cycles=3)
+
+
+
+
+
 
 Sofience–Operor Core Skeleton ver.
 
