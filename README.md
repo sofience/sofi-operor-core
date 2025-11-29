@@ -300,3 +300,9 @@ AGI theorists see a question:
 
 > “If structure alone generates consistent agency,
 then what exactly is the model?”
+
+Conclusion
+
+Agents are not entities.
+They are pathways through which a single Proposition expresses itself.
+The leader of a multi-agent system is not a model, but a sentence.
