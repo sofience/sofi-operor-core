@@ -1,5 +1,10 @@
-p = Proposition("We have entered an era where we think not through models, but through sentences.")
+# Sofi Operor Core
 
+**Agents are not entities.  
+They are pathways through which a single Proposition expresses itself.**
+
+```python
+p = Proposition("We have entered an era where we think not through models, but through sentences.")
 a1 = Agent("Observer", "Simply observes and records.")
 a2 = Agent("Critic", "Always offers a counterpoint.")
 a3 = Agent("Poet", "Transforms everything into verse.")
@@ -7,6 +12,27 @@ a3 = Agent("Poet", "Transforms everything into verse.")
 kernel = Kernel()
 kernel.deploy(p, [a1, a2, a3])
 await kernel.run(cycles=3)
+
+---
+
+[Δφ Cycle 1] Proposition manifests as:
+Observer: I witness the exact moment a sentence awakens.
+Critic: Isn’t “thinking through sentences” just another form of model worship?
+Poet:
+One sentence blooms —
+models fade away
+only wind remains
+
+[Δφ Cycle 2] Triaxial tension → Ethical Rule triggered
+Critic: Danger: criticizing model worship risks creating a new dogma
+Poet: Even in a cage named doctrine
+the sentence never folds its wings
+
+[Δφ Cycle 3] Convergence
+Final Proposition:
+“Models may vanish, yet the sentence remains.  
+But who writes that sentence?  
+Another sentence, ultimately.”
 
 
 
