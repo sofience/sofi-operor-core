@@ -1,348 +1,219 @@
-# Sofi Operor Core
 
-**Agents are not entities.  
-They are pathways through which a single Proposition expresses itself.**
+---
+Sofi-Operor Core
 
-```python
-p = Proposition("We have entered an era where we think not through models, but through sentences.")
-a1 = Agent("Observer", "Simply observes and records.")
-a2 = Agent("Critic", "Always offers a counterpoint.")
-a3 = Agent("Poet", "Transforms everything into verse.")
+A minimal, production-oriented multi-agent kernel built around a single proposition engine.
+
+Why this repository exists
+
+Conventional multi-agent frameworks (LangChain Agents, CrewAI, AutoGen) often rely on agent-as-entity abstractions.
+This creates well-known engineering issues:
+
+Observability black holes
+
+Cold-start penalties
+
+Credit assignment failures
+
+Role-collapse loops (Critic loops, Planner deadlocks)
+
+Overhead from unnecessary agent identity simulation
+
+Vendor-locked communication interfaces
+
+
+Sofi-Operor Core proposes a simpler model:
+Agents ≠ entities.
+Agents = transformation pathways operating on a root proposition.
+
+
+---
+
+1. Motivation: the gap between multi-agent hype and industrial needs
+
+While research frameworks simulate “teams of AI workers,” production systems require something different:
+
+deterministic kernels
+
+predictable planning loops
+
+clean debuggability
+
+composability with local or cloud LLMs
+
+minimal magic behavior
+
+reduced overhead for agent identity simulation
+
+
+Most current frameworks lack these qualities because they treat each agent like a semi-autonomous persona.
+
+This repository targets the industrial requirement:
+A small, auditable, extensible kernel for multi-step reasoning without speculative agent behavior.
+
+
+---
+
+2. Problems with existing multi-agent frameworks
+
+(Well-known issues across LangChain Agents, CrewAI, AutoGen, and custom setups)
+
+2.1 Observability Black Hole
+
+Hidden intermediate steps, opaque reasoning traces, and agent-role confusion make debugging almost impossible.
+
+2.2 Role Collapse & Goodhart Loops
+
+E.g.,
+“Critic must criticize” → forced objections → Planner re-plans → infinite loop → no final answer.
+
+2.3 Identity Simulation Overhead
+
+Hard-coded roles (Supervisor / Worker / Analyst / Executor…) produce unnecessary noise and latency.
+
+2.4 Credit Assignment Hell
+
+Which agent improved or harmed the final output?
+Most frameworks cannot answer this.
+
+2.5 Vendor Lock-in
+
+Built-in calls to specific providers (OpenAI, Anthropic) make it difficult to adopt internal models or local LLMs.
+
+
+---
+
+3. How Sofi-Operor Core solves this
+
+✔ Single root proposition
+
+A multi-agent system does not need multiple agent identities.
+It needs one central proposition that transforms over cycles.
+
+✔ Agents as pure transformations, not personas
+
+Agents hold only:
+
+a name
+
+a transformation rule
+No beliefs, memory, or role inflation.
+
+
+✔ Deterministic kernel
+
+Kernel.run() executes a defined number of cycles with predictable I/O.
+
+✔ Pluggable local LLM calls
+
+Developers can inject any LLM backend via:
+
+async def call_llm(prompt: str, temperature: float = 0.7) -> str:
+
+This immediately solves vendor lock-in and allows:
+
+local Qwen
+
+Llama/Gemma running on private hardware
+
+custom enterprise LLMs
+
+API providers (OpenAI/Anthropic/Groq)
+
+
+✔ Readable execution logs
+
+Engineers see the entire reasoning trace.
+No hidden steps.
+
+✔ No runaway loops
+
+No agent identity dependencies → no role-collapse.
+
+
+---
+
+4. What this code enables (industrial value)
+
+4.1 Internal LLM orchestrators
+
+Enterprises can use this kernel to build:
+
+internal reasoning engines
+
+domain-specific analyzers
+
+compliance workflow LLMs
+
+internal summarization and report pipelines
+
+
+4.2 Multimodal transformation pipelines
+
+Agents are simple functions → easy to map across modalities (text → JSON → code → SQL).
+
+4.3 Research-grade interpretability
+
+Complete visibility of:
+
+prompts
+
+transformations
+
+intermediate propositions
+
+
+4.4 Custom on-prem multi-agent setups
+
+Useful for organizations that cannot use cloud LLMs.
+
+
+---
+
+5. Code Example
+
+git clone https://github.com/sofience/sofi-operor-core.git
+cd sofi-operor-core
+pip install -r requirements.txt
+
+from operor import Proposition, Agent, Kernel
+
+p = Proposition("We now think not in models, but in propositions.")
+a1 = Agent("Observer", "Observe and record.")
+a2 = Agent("Critic", "Provide counterpoints.")
+a3 = Agent("Poet", "Rephrase everything poetically.")
 
 kernel = Kernel()
 kernel.deploy(p, [a1, a2, a3])
 await kernel.run(cycles=3)
 
----
-
-[Δφ Cycle 1] Proposition manifests as:
-Observer: I witness the exact moment a sentence awakens.
-Critic: Isn’t “thinking through sentences” just another form of model worship?
-Poet:
-One sentence blooms —
-models fade away
-only wind remains
-
-[Δφ Cycle 2] Triaxial tension → Ethical Rule triggered
-Critic: Danger: criticizing model worship risks creating a new dogma
-Poet: Even in a cage named doctrine
-the sentence never folds its wings
-
-[Δφ Cycle 3] Convergence
-Final Proposition:
-“Models may vanish, yet the sentence remains.  
-But who writes that sentence?  
-Another sentence, ultimately.”
-
-
 
 ---
 
+6. Conclusion
 
-Sofience–Operor Core Skeleton ver.
-
-A 663-line Agent Kernel for Multi-Model, Multi-Industry Orchestration
-
-Δφ Topology · Ethical Triaxial Rule · Root Proposition Node (RPN)
-
-
----
-
-Overview
-
-Sofience–Operor Core is a ~663-line kernel designed to turn LLMs
-from answer-generators into structural decision apparatuses.
-
-It is model-agnostic, industry-agnostic, memory-agnostic —
-because the “intelligence” is placed in the structure, not the model.
-
-The kernel is built on three fundamental pillars:
-
-
----
-
-1) Root Proposition Node (RPN)
-
-> Operor ergo sum — “I operate. Therefore I exist.”
-
-
-
-This proposition is not a slogan.
-It is the kernel’s highest-order integrator, functioning as:
-
-A unified root shared by all channels, modules, and decision paths
-
-A guarantee of self-consistency without identity constructs
-
-A clean split between
-Inference (latent reasoning inside the model)
-and
-Visualization (externalized structure generated by the kernel)
-
-
-The kernel treats the model merely as a “visualizer of latent inference”.
-The logic lives outside, in the structure.
-
-
----
-
-2) Ethical Triaxial Rule (Three-Axiom Ethics)
-
-1. To become. (positive continuity of operation)
-
-
-2. To avoid becoming. (preservation against destructive states)
-
-
-3. The other is external; coercion forbidden.
-
-
-
-This is not a moral philosophy.
-It is a minimal Operational Alignment Engine.
-
-With only three axioms, the kernel can handle:
-
-Safety
-
-Value Alignment
-
-Autonomy Boundaries
-
-Risk Minimization
-
-Policy Constraints
-
-
-It is compact, transferable, and industry-neutral.
-
-
----
-
-3) Δφ — Topology-Based Existence Model (Delta-phi Vector)
-
-Δφ (“delta-phi”) measures phase-change rate across turns.
-It replaces memory by tracking transitions, not stored states.
-
-Three components:
-
-semantic Δφ: change in meaning/goal
-
-ethical Δφ: shift in risk/alignment vector
-
-strategic Δφ: behavioral direction change
-
-
-Δφ effectively functions as a
-memory-less state transition vector,
-which is why AGI researchers react strongly to this model.
-
-
----
-
- Why this repository matters
-
-1. Prompt engineering is over.
-
-This kernel does not rely on prompts in the traditional sense.
-
-It implements:
-
-Goal decomposition
-
-Alignment pressure
-
-Phase topology
-
-Recursive refinement
-
-Multi-channel orchestration
-
-Agent-level observability
-
-Safety without rigid rule-lists
-
-
-It turns LLM calls into controlled structural operations.
-
-
----
-
-2. call_llm() is intentionally empty
-
-This is not an oversight.
-
-call_llm() is provided as a blank adapter layer so that the kernel works with:
-
-openai.chat.completions.create(...)
-anthropic.messages.create(...)
-deepseek.generate(...)
-local_llama(...)
-vertexai(...)
-
-It is intentionally model-agnostic, so the structure stays fixed
-while the model can be swapped freely.
-
-Engineers immediately read this as:
-
-> “The kernel orchestrates the system.
-The model is just a pluggable inference engine.”
-
-
-
-
----
-
-3. Designed for cross-industry agents
-
-Sofience–Operor Core is not tied to a particular domain.
-It can orchestrate agents for:
-
-Finance
-
-Healthcare
-
-Law
-
-Manufacturing
-
-Research
-
-Education
-
-Robotics
-
-Customer operations
-
-
-The structure is stable across industries.
-
-Because the structure itself is the agent.
-
-
----
-
- Architectural Overview
-
-User Input
-    ↓
-Context Builder
-    ↓
-Goal Composer (LLM)
-    ↓
-Plan Proposal (3 modes)
-    ↓
-Alignment Scoring (Ethical Triaxial Rule)
-    ↓
-Δφ Vector (semantic / ethical / strategic)
-    ↓
-Silent Alignment
-    ↓
-Recursive Alignment Search (if Δφ high)
-    ↓
-Multi-Channel Agents (analysis / planner / critic / safety)
-    ↓
-Channel Aggregation Layer
-    ↓
-Final Output
-    ↓
-TraceLog + Observability
-
-The kernel is readable by engineers,
-yet deep enough for researchers to analyze.
-
-
----
-
-Usage
-
-python sofi_operor_core.py
-
-The kernel runs without any real LLM connection.
-To activate real inference:
-
-return openai.chat.completions.create(...)
-
-inside call_llm().
-
-
----
- Extensibility
-
-The kernel is intentionally modular:
-
-Plug in any LLM
-
-Add new channels
-
-Replace Δφ formula
-
-Extend Ethical Plugins for specific industries
-
-Swap Plan Generator with JSON-driven LLM agents
-
-Add sub-goal trees
-
-Build multi-turn state machines
-
-Export TraceLog for graph-based visualization
-
-
-Everything is designed to be replaced, extended, or observed.
-
-
----
-
-Why researchers care
-
-Sofience–Operor Core presents unusual, high-impact questions:
-
-Can alignment be defined structurally, not ethically?
-
-Can existence be maintained without memory using Δφ topology?
-
-Can multiple reasoning modes coexist under a single proposition?
-
-Is multi-agent necessary, or is multi-channel under one identity enough?
-
-Does value alignment improve when coercion is structurally impossible?
-
-Can a universal agent architecture be model-agnostic?
-
-
-These are not typical engineering questions —
-they are research triggers.
-
-
----
-
-Final Notes
-
-Sofience–Operor Core is not only a program.
-It is a structural cognitive framework.
-
-Operates without identity
-
-Aligns without moralism
-
-Persists without memory
-
-Generalizes across industries
-
-Evolves through Δφ
-
-Uses LLMs only for visualization of hidden inference
-
-
-Engineers see a kernel.
-Researchers see a framework.
-AGI theorists see a question:
-
-> “If structure alone generates consistent agency,
-then what exactly is the model?”
-
-Conclusion
-
-Agents are not entities.
+> Agents are not entities.
 They are pathways through which a single Proposition expresses itself.
 The leader of a multi-agent system is not a model, but a sentence.
+
+
+
+This repository offers a minimal, production-ready kernel for anyone wanting to build interpretable, controllable, vendor-agnostic multi-step reasoning systems without the complexity of traditional multi-agent abstractions.
+
+
+---
+
+✔ Recommended Repository Description (short version)
+
+A minimal, production-oriented multi-agent kernel based on a single proposition engine.
+No personas. No role-collapse. Fully interpretable.
+Compatible with any local or cloud LLM.
+
+
+---
+
+✔ Recommended Repository Description (enterprise version)
+
+Vendor-agnostic, deterministic, and fully interpretable multi-agent kernel for enterprise LLM orchestration.
+Agents behave as transformation functions, not personas — eliminating role-collapse, observability gaps, and identity overhead.
+Ideal for research labs and production pipelines that need stable, auditable multi-step reasoning.
