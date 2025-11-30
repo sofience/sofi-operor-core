@@ -176,7 +176,8 @@ Useful for organizations that cannot use cloud LLMs.
 ```bash
 git clone https://github.com/sofience/sofi-operor-core.git
 cd sofi-operor-core
-pip install -r requirements.txt```
+pip install -r requirements.txt
+```
 
 
 ```python
@@ -189,7 +190,8 @@ a3 = Agent("Poet", "Rephrase everything poetically.")
 
 kernel = Kernel()
 kernel.deploy(p, [a1, a2, a3])
-await kernel.run(cycles=3)```
+await kernel.run(cycles=3)
+```
 
 
 ---
