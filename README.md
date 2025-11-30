@@ -1,177 +1,127 @@
-
 ---
+
 Sofi-Operor Core
 
-A minimal, production-oriented multi-agent kernel built around a single proposition engine.
+A 663-line multi-agent kernel that doesn’t hallucinate roles — and stays controllable.
 
-Why this repository exists
+Sofi-Operor Core is a minimal, production-oriented multi-agent kernel designed for LLM-based systems that require high observability, predictable role behavior, and deterministic alignment logic.
 
-Conventional multi-agent frameworks (LangChain Agents, CrewAI, AutoGen) often rely on agent-as-entity abstractions.
-This creates well-known engineering issues:
-
-Observability black holes
-
-Cold-start penalties
-
-Credit assignment failures
-
-Role-collapse loops (Critic loops, Planner deadlocks)
-
-Overhead from unnecessary agent identity simulation
-
-Vendor-locked communication interfaces
-
-
-Sofi-Operor Core proposes a simpler model:
-Agents ≠ entities.
-Agents = transformation pathways operating on a root proposition.
+Unlike many multi-agent frameworks—where agents drift, contradict each other, or recursively collapse due to role confusion—Sofi-Operor Core treats “roles” as execution pathways, not personalities.
+This avoids the Critic-loop, Goodhart drift, role-hallucination, and recursive over-correction failure modes common in CrewAI, LangChain Agents, AutoGen, and custom agent stacks.
 
 
 ---
 
-1. Motivation: the gap between multi-agent hype and industrial needs
+1. Why existing multi-agent stacks fail
 
-While research frameworks simulate “teams of AI workers,” production systems require something different:
+Most multi-agent systems in the industry break down for predictable structural reasons:
 
-deterministic kernels
+🔹 1. Role Hallucination
 
-predictable planning loops
+Agents interpret their role instructions too literally (“critic must always criticize”), producing contradictory or low-quality outputs.
 
-clean debuggability
+🔹 2. Goodhart Loops
 
-composability with local or cloud LLMs
+Supervisor → Worker chains collapse into “optimize the instruction instead of the task.”
 
-minimal magic behavior
+🔹 3. Infinite Recursion
 
-reduced overhead for agent identity simulation
+Critic → Planner → Critic cycles repeat indefinitely because the Proposition (root directive) never updates.
 
+🔹 4. Observability Black Holes
 
-Most current frameworks lack these qualities because they treat each agent like a semi-autonomous persona.
+Developers can’t inspect why an agent made a decision. No trace logs, no Δφ(change-rate) metrics, no alignment signals.
 
-This repository targets the industrial requirement:
-A small, auditable, extensible kernel for multi-step reasoning without speculative agent behavior.
+🔹 5. Credit Assignment Hell
 
+When a system succeeds or fails, no one knows which agent caused it.
 
----
-
-2. Problems with existing multi-agent frameworks
-
-(Well-known issues across LangChain Agents, CrewAI, AutoGen, and custom setups)
-
-2.1 Observability Black Hole
-
-Hidden intermediate steps, opaque reasoning traces, and agent-role confusion make debugging almost impossible.
-
-2.2 Role Collapse & Goodhart Loops
-
-E.g.,
-“Critic must criticize” → forced objections → Planner re-plans → infinite loop → no final answer.
-
-2.3 Identity Simulation Overhead
-
-Hard-coded roles (Supervisor / Worker / Analyst / Executor…) produce unnecessary noise and latency.
-
-2.4 Credit Assignment Hell
-
-Which agent improved or harmed the final output?
-Most frameworks cannot answer this.
-
-2.5 Vendor Lock-in
-
-Built-in calls to specific providers (OpenAI, Anthropic) make it difficult to adopt internal models or local LLMs.
+Sofi-Operor Core is designed to eliminate these classes of failures at the architecture level.
 
 
 ---
 
-3. How Sofi-Operor Core solves this
+2. What this kernel does differently
 
-✔ Single root proposition
+✔ 2.1 A single Proposition leads the system
 
-A multi-agent system does not need multiple agent identities.
-It needs one central proposition that transforms over cycles.
+Instead of building a cluster of “AI personalities,” the kernel routes every agent’s behavior through a single Root Proposition Node.
 
-✔ Agents as pure transformations, not personas
+This removes role drift and ensures global coherence.
 
-Agents hold only:
+✔ 2.2 Agents are execution channels, not entities
 
-a name
+“Analysis / Planner / Critic / Safety” channels do not simulate personalities.
+They perform predictable transformations on the same state.
 
-a transformation rule
-No beliefs, memory, or role inflation.
+✔ 2.3 Deterministic alignment scoring
 
+Every plan is evaluated via:
 
-✔ Deterministic kernel
+Alignment score
 
-Kernel.run() executes a defined number of cycles with predictable I/O.
+Risk score
 
-✔ Pluggable local LLM calls
+Ethical check
 
-Developers can inject any LLM backend via:
+Δφ(change-rate) vector
 
-async def call_llm(prompt: str, temperature: float = 0.7) -> str:
+PhaseState snapshot
 
-This immediately solves vendor lock-in and allows:
-
-local Qwen
-
-Llama/Gemma running on private hardware
-
-custom enterprise LLMs
-
-API providers (OpenAI/Anthropic/Groq)
+Trace-based recursion control
 
 
-✔ Readable execution logs
+✔ 2.4 Full observability
 
-Engineers see the entire reasoning trace.
-No hidden steps.
+Every decision is logged via a TraceLog entry with:
 
-✔ No runaway loops
+Context
 
-No agent identity dependencies → no role-collapse.
+Goal
 
+Scored Plans
 
----
+Δφ semantic/ethical/strategic vector
 
-4. What this code enables (industrial value)
-
-4.1 Internal LLM orchestrators
-
-Enterprises can use this kernel to build:
-
-internal reasoning engines
-
-domain-specific analyzers
-
-compliance workflow LLMs
-
-internal summarization and report pipelines
+Phase transitions
 
 
-4.2 Multimodal transformation pipelines
-
-Agents are simple functions → easy to map across modalities (text → JSON → code → SQL).
-
-4.3 Research-grade interpretability
-
-Complete visibility of:
-
-prompts
-
-transformations
-
-intermediate propositions
-
-
-4.4 Custom on-prem multi-agent setups
-
-Useful for organizations that cannot use cloud LLMs.
+This is the part that usually impresses engineers:
+You can finally see why the system made a decision.
 
 
 ---
 
-5. Code Example
+3. Industrial applications
 
+Sofi-Operor Core is intentionally small but can scale to:
+
+• Workflow automation agents
+
+Predictable Planner-Critic-Safety cycles with no hallucinated behaviors.
+
+• Enterprise copilots
+
+Consistent multi-step reasoning with visible decision traces.
+
+• Research assistants
+
+Deterministic “analysis → proposal → critique → refine” loops.
+
+• AI governance / compliance
+
+Replace black-box agent chains with transparent scoring + trace logging.
+
+• Product prototyping
+
+A compact, extensible kernel for experimenting with multi-agent orchestration.
+
+
+---
+
+4. Installation
+
+Method 1 — Standard clone
 
 ```bash
 git clone https://github.com/sofience/sofi-operor-core.git
@@ -180,46 +130,79 @@ pip install -r requirements.txt
 ```
 
 
-```python
-from operor import Proposition, Agent, Kernel
+---
 
-p = Proposition("We now think not in models, but in propositions.")
-a1 = Agent("Observer", "Observe and record.")
-a2 = Agent("Critic", "Provide counterpoints.")
-a3 = Agent("Poet", "Rephrase everything poetically.")
+5. Install & Run (auto-setup script)
 
-kernel = Kernel()
-kernel.deploy(p, [a1, a2, a3])
-await kernel.run(cycles=3)
+Place the following in install_and_run.sh:
+
+
+```bash
+#!/bin/bash
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the kernel with a simple test LLM function
+python3 sofi_operor_core.py
 ```
 
+Give execution permission:
+
+```bash
+chmod +x install_and_run.sh
+```
+
+Then run:
+
+```bash
+./install_and_run.sh
+```
 
 ---
 
-6. Conclusion
+6. Example: Running with a local LLM
 
-> Agents are not entities.
-They are pathways through which a single Proposition expresses itself.
-The leader of a multi-agent system is not a model, but a sentence.
+If you have a local LLM endpoint:
 
+```python 
+async def call_llm(prompt: str, temperature: float = 0.7) -> str:
+    import httpx
+    response = httpx.post(
+        "http://localhost:11434/api/generate",
+        json={
+            "model": "qwen2.5:32b",
+            "prompt": prompt,
+            "stream": False,
+            "options": {"temperature": temperature}
+        },
+        timeout=120.0
+    )
+    return response.json()["response"]
 
-
-This repository offers a minimal, production-ready kernel for anyone wanting to build interpretable, controllable, vendor-agnostic multi-step reasoning systems without the complexity of traditional multi-agent abstractions.
-
+Plug it into call_llm() inside sofi_operor_core.py and the system runs end-to-end.
+```
 
 ---
 
-✔ Recommended Repository Description (short version)
+7. Conclusion
 
-A minimal, production-oriented multi-agent kernel based on a single proposition engine.
-No personas. No role-collapse. Fully interpretable.
-Compatible with any local or cloud LLM.
+Sofi-Operor Core is a compact, fully inspectable multi-agent kernel that solves the major structural weaknesses of existing frameworks.
+
+It is:
+
+Small enough to be readable
+
+Modular enough to extend
+
+Deterministic enough for production
+
+Transparent enough for research
+
+Flexible enough to integrate with any LLM API or local model
+
+
+If you want agents that stay aligned, stay observable, and don’t hallucinate identities, this kernel is the right foundation.
 
 
 ---
-
-✔ Recommended Repository Description (enterprise version)
-
-Vendor-agnostic, deterministic, and fully interpretable multi-agent kernel for enterprise LLM orchestration.
-Agents behave as transformation functions, not personas — eliminating role-collapse, observability gaps, and identity overhead.
-Ideal for research labs and production pipelines that need stable, auditable multi-step reasoning.
