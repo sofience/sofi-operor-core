@@ -1,4 +1,6 @@
-import types
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 import sofi_operor_core as core
 
 
